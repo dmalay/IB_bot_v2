@@ -3,6 +3,7 @@ import cors from 'cors'
 import path from 'path'
 import http from 'http'
 import passport from 'passport'
+import { spawn } from 'child_process'
 
 import options from './config'
 import router from './router'
@@ -42,3 +43,17 @@ server.listen(PORT, (error) => {
   if (error) throw error
   console.log(`listening on port:${PORT}`)
 })
+
+const pythonServer = spawn('python3', ['python-scripts/api_server.py']);
+
+pythonServer.stdout.on('data', (data) => {
+  console.log(`Python Server: ${data}`);
+});
+
+pythonServer.stderr.on('data', (data) => {
+  console.error(`Python Error: ${data}`);
+});
+
+pythonServer.on('close', (code) => {
+  console.log(`Python server process exited with code ${code}`);
+});
