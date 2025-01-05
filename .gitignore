@@ -4,3 +4,25 @@
 yarn-error.log
 /.env
 **/.env
+
+# Исключить виртуальное окружение
+python-scripts/venv/
+
+# Исключить файлы кеша Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Исключить файлы логов и временные файлы
+*.log
+*.tmp
+
+# Исключить Jupyter Notebook Checkpoints (если используются)
+.ipynb_checkpoints/
+
+# Исключить выходные файлы из IDE
+.idea/
+.vscode/
+
+# Исключить конфиденциальные файлы
+*.env
