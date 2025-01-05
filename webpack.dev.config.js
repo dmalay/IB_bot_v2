@@ -4,7 +4,7 @@ const { merge } = require('webpack-merge')
 const path = require('path')
 const common = require('./webpack.common.config')
 
-const CLIENT_PORT = 8088
+const { PORT, CLIENT_PORT } = process.env
 
 const config = {
   mode: 'development',
@@ -26,13 +26,14 @@ const config = {
     port: CLIENT_PORT,
     host: 'localhost',
     proxy: {
-      target: 'http://localhost:5001',
+      target: `http://localhost:${PORT}`,
       context: ['/api', '/socket.io'],
       ws: true,
     },
     webSocketServer: 'ws',
     historyApiFallback: true,
     client: {
+      webSocketTransport: 'ws',
       overlay: {
         warnings: false,
         errors: true,

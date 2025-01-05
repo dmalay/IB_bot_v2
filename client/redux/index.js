@@ -1,15 +1,16 @@
 import { createStore, applyMiddleware, compose } from 'redux'
-import { composeWithDevTools } from 'redux-devtools-extension'
+import { composeWithDevTools } from '@redux-devtools/extension'
 import { createBrowserHistory } from 'history'
 import { routerMiddleware } from 'connected-react-router'
 import thunk from 'redux-thunk'
 
 import rootReducer from './reducers'
+import socketMiddleware from './middleware/socket.io'
 
 const initialState = {}
 export const history = createBrowserHistory()
 
-const middlewares = [thunk, routerMiddleware(history)]
+const middlewares = [thunk, routerMiddleware(history), socketMiddleware()]
 
 const rootReducerWithHistory = rootReducer(history)
 const composeFunc = process.env.NODE_ENV === 'development' ? composeWithDevTools : compose
