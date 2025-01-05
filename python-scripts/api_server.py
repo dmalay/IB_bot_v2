@@ -1,22 +1,33 @@
 from flask import Flask, jsonify, request
 from dotenv import load_dotenv
 import os
+import joblib
+import numpy as np
 
 # Загрузка переменных окружения
 load_dotenv()
 
-
 app = Flask(__name__)
+
+# Загрузка модели
+model = joblib.load('models/linear_regression_model.pkl')
 
 @app.route('/predict', methods=['POST'])
 def predict():
     # Получаем данные из запроса
     data = request.json
-    input_value = data.get('input', 0)
+    features = data.get('features', [])
     
-    # Простая логика для примера
-    result = {"output": input_value * 2}
-    return jsonify(result)
+    if not features or len(features) == 0:
+        return jsonify({"error": "Features are missing"}), 400
+    
+    try:
+        features = np.array(features).reshape(1, -1)
+        prediction = model.predict(features)
+        return jsonify({"prediction": prediction[0]})  # response format  {"prediction": 6.4}
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 @app.route('/status', methods=['GET'])
 def status():
